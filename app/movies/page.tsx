@@ -6,7 +6,13 @@ async function getMovies() {
 	const host = (await headers()).get("host");
 	if (!host) throw new Error("Host not found");
 
-	const res = await fetch(`http://${host}/api/movies`, {
+	const fullUrl = host.startsWith("localhost")
+		? `http://${host}/api/movies`
+		: `https://${host}/api/movies`;
+
+	console.log("fullUrl", fullUrl);
+	console.log("host", host);
+	const res = await fetch(fullUrl, {
 		cache: "no-store",
 	});
 
