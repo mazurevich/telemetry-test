@@ -3,9 +3,10 @@ import { movieResponseSchema } from "#/data/movie";
 
 export async function GET(
 	request: NextRequest,
-	{ params }: { params: { id: string } },
+	{ params }: { params: Promise<{ id: string }> },
 ) {
-	const response = await fetch(`https://swapi.tech/api/films/${params.id}`);
+	const { id } = await params;
+	const response = await fetch(`https://swapi.tech/api/films/${id}`);
 	const data = await response.json();
 
 	const movie = movieResponseSchema.parse(data);

@@ -9,17 +9,18 @@ const getMovie = async (id: string) => {
 	return data;
 };
 
-export default async function MovieDetailPage({
-	params,
-}: {
-	params: { id: string };
-}) {
-	const movie = await getMovie(params.id);
-	if (!movie) return notFound();
+export default async function MovieDetailPage(
+    props: {
+        params: Promise<{ id: string }>;
+    }
+) {
+    const params = await props.params;
+    const movie = await getMovie(params.id);
+    if (!movie) return notFound();
 
-	const { properties } = movie;
+    const { properties } = movie;
 
-	return (
+    return (
 		<main className="p-8">
 			<h1 className="text-2xl font-bold mb-2">
 				{properties.title} ({properties.release_date})
