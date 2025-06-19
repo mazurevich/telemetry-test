@@ -1,7 +1,10 @@
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 
 const getMovie = async (id: string) => {
-	const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/movies/${id}`);
+	const host = (await headers()).get("host");
+	if (!host) throw new Error("Host not found");
+	const res = await fetch(`http://${host}/api/movies/${id}`);
 	const data = await res.json();
 	return data;
 };

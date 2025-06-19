@@ -1,10 +1,15 @@
+import { headers } from "next/headers";
 import Link from "next/link";
 import type { Movie } from "#/data/movie";
 
 async function getMovies() {
-	const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/movies`, {
+	const host = (await headers()).get("host");
+	if (!host) throw new Error("Host not found");
+
+	const res = await fetch(`http://${host}/api/movies`, {
 		cache: "no-store",
 	});
+
 	if (!res.ok) throw new Error("Failed to fetch movies");
 	return res.json();
 }
