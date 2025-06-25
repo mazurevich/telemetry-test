@@ -22,6 +22,7 @@ async function getMovies() {
 
 export default async function MoviesPage() {
 	const data = await getMovies();
+	// await new Promise((resolve) => setTimeout(resolve, 100000));
 	const movies = data;
 
 	return (

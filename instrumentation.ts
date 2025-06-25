@@ -1,5 +1,12 @@
-import { registerOTel } from "@vercel/otel";
+import { ConsoleSpanExporter } from "@opentelemetry/sdk-trace-base";
+import { OTLPHttpJsonTraceExporter, registerOTel } from "@vercel/otel";
 
 export function register() {
-	registerOTel({ serviceName: "next-app" });
+	registerOTel({
+		serviceName: "sw-movies",
+		// traceExporter: new ConsoleSpanExporter(),
+		traceExporter: new OTLPHttpJsonTraceExporter({
+			url: "http://0.0.0.0:4318",
+		}),
+	});
 }
