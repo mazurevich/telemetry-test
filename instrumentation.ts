@@ -6,7 +6,7 @@ export function register() {
 		serviceName: "sw-movies",
 		// traceExporter: new ConsoleSpanExporter(),
 		traceExporter: new OTLPHttpJsonTraceExporter({
-			url: "http://0.0.0.0:4318",
+			url: "http://localhost:4318/v1/traces",
 		}),
 	});
 }

@@ -10,8 +10,6 @@ async function getMovies() {
 		? `http://${host}/api/movies`
 		: `https://${host}/api/movies`;
 
-	console.log("fullUrl", fullUrl);
-	console.log("host", host);
 	const res = await fetch(fullUrl, {
 		cache: "no-store",
 	});
