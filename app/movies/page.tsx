@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import Link from "next/link";
 import type { Movie } from "#/data/movie";
+import { logInfo } from "#/lib/logger";
 
 async function getMovies() {
 	const host = (await headers()).get("host");
@@ -23,6 +24,9 @@ export default async function MoviesPage() {
 	// await new Promise((resolve) => setTimeout(resolve, 100000));
 	const movies = data;
 
+	// console.log("movies", movies.length);
+	logInfo("Fetched movies successfully", { count: movies.length });
+
 	return (
 		<main className="p-8">
 			<h1 className="text-2xl font-bold mb-6">Movies List</h1>
@@ -38,7 +42,7 @@ export default async function MoviesPage() {
 									{movie.properties.title}
 								</Link>
 							</h2>
-							<p className="text-sm text-zinc-600 dark:text-zinc-300 mb-2 line-clamp-3">
+							<p className="text-sm text-zinc-600 dark:bg-zinc-300 mb-2 line-clamp-3">
 								{movie.properties.opening_crawl}
 							</p>
 							<p className="text-xs text-zinc-500 dark:text-zinc-400 mb-1">

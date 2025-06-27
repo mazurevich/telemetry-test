@@ -16,6 +16,28 @@ services:
     ports:
       - "9411:9411"
 
+  # Loki for log aggregation
+  loki:
+    image: grafana/loki:2.9.0
+    restart: always
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - ./loki-config.yaml:/etc/loki/local-config.yaml
+      - loki-data:/var/lib/loki
+
+  # Grafana for visualization
+  grafana:
+    image: grafana/grafana:latest
+    restart: always
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
   # Collector
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.128.0
@@ -35,6 +57,7 @@ services:
     depends_on:
       - jaeger-all-in-one
       - zipkin-all-in-one
+      - loki
 
   prometheus:
     container_name: prometheus
@@ -44,3 +67,7 @@ services:
       - ./prometheus.yaml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
+
+volumes:
+  grafana-storage:
+  loki-data:

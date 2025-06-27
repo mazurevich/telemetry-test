@@ -24,6 +24,12 @@ exporters:
     tls:
       insecure: true
 
+  # Loki exporter for log aggregation
+  otlphttp/logs:
+    endpoint: "http://loki:3100/otlp"
+    tls:
+      insecure: true
+
 processors:
   batch:
   memory_limiter:
@@ -44,7 +50,7 @@ service:
     logs:
       receivers: [otlp]
       processors: [memory_limiter, batch]
-      exporters: [debug]
+      exporters: [debug, otlphttp/logs]
   telemetry:
     metrics:
       readers:
