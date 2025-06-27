@@ -1,7 +1,7 @@
 import { trace } from "@opentelemetry/api";
 import { type NextRequest, NextResponse } from "next/server";
 import { moviesResponseSchema } from "#/data/movie";
-import { logError, logInfo } from "#/lib/logger";
+import { logger } from "#/lib/logger";
 
 export async function GET(request: NextRequest) {
 	const tracer = trace.getTracer("movies");
@@ -10,7 +10,8 @@ export async function GET(request: NextRequest) {
 
 	try {
 		const url = "https://swapi.tech/api/films";
-		logInfo("Fetching movies from SWAPI", { url });
+		debugger;
+		logger.info("Fetching movies from SWAPI", { url });
 
 		const response = await fetch(url);
 		const data = await response.json();
@@ -20,7 +21,7 @@ export async function GET(request: NextRequest) {
 
 		const movies = moviesResponseSchema.parse(data);
 
-		logInfo("Successfully fetched and parsed movies", {
+		logger.info("Successfully fetched and parsed movies", {
 			count: movies.result.length,
 			statusCode: response.status,
 		});
@@ -28,7 +29,7 @@ export async function GET(request: NextRequest) {
 		span.end();
 		return NextResponse.json(movies.result);
 	} catch (error) {
-		logError("Failed to fetch movies", error as Error, {
+		logger.error("Failed to fetch movies", error as Error, {
 			url: "https://swapi.tech/api/films",
 		});
 		span.recordException(error as Error);

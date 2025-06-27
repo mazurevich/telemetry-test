@@ -1,6 +1,14 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
+import { logger } from "#/lib/logger";
 
 const MoviesLoadingSkeleton = () => {
+	logger.info("Loading movies skeleton");
+
+	useEffect(() => {
+		logger.info("Loading movies skeleton");
+	}, []);
+
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<div className="mb-8">
