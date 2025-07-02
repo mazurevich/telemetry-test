@@ -1,4 +1,5 @@
 import { logs } from "@opentelemetry/api-logs";
+// import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentations-node";
 import { OTLPLogExporter } from "@opentelemetry/exporter-logs-otlp-http";
 import {
 	ConsoleLogRecordExporter,
@@ -35,5 +36,6 @@ export function register() {
 		logRecordProcessor: new SimpleLogRecordProcessor(
 			new ConsoleLogRecordExporter(),
 		),
+		// instrumentations: [getNodeAutoInstrumentations()],
 	});
 }

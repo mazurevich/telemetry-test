@@ -15,10 +15,6 @@ exporters:
   debug:
     verbosity: detailed
 
-  zipkin:
-    endpoint: "http://zipkin-all-in-one:9411/api/v2/spans"
-    format: proto
-
   otlp:
     endpoint: "jaeger-all-in-one:4317"
     tls:
@@ -42,7 +38,7 @@ service:
     traces:
       receivers: [otlp]
       processors: [memory_limiter, batch]
-      exporters: [debug, zipkin, otlp]
+      exporters: [debug, otlp]
     metrics:
       receivers: [otlp]
       processors: [memory_limiter, batch]
@@ -57,7 +53,7 @@ service:
         - pull:
             exporter:
               prometheus:
-                host: '0.0.0.0'
+                host: "0.0.0.0"
                 port: 8888
 
 

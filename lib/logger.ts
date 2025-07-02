@@ -3,7 +3,6 @@ import pino from "pino";
 
 // Environment-based configuration
 const isDevelopment = process.env.NODE_ENV === "development";
-const isProduction = process.env.NODE_ENV === "production";
 
 // Create the base logger configuration
 const createLoggerConfig = () => {

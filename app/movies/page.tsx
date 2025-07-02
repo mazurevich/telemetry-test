@@ -1,6 +1,8 @@
 import { headers } from "next/headers";
 import Link from "next/link";
 import type { Movie } from "#/data/movie";
+import { logger } from "#/lib/logger";
+import { LogButton } from "./log-button";
 
 async function getMovies() {
 	const host = (await headers()).get("host");
@@ -20,11 +22,8 @@ async function getMovies() {
 
 export default async function MoviesPage() {
 	const data = await getMovies();
-	// await new Promise((resolve) => setTimeout(resolve, 100000));
-	const movies = data;
 
-	console.log("movies", movies.length);
-	// logger.info("Fetched movies successfully", { count: movies.length });
+	const movies = data;
 
 	return (
 		<main className="p-8">
@@ -56,6 +55,7 @@ export default async function MoviesPage() {
 					</div>
 				))}
 			</div>
+			<LogButton />
 		</main>
 	);
 }
