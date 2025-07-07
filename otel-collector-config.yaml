@@ -20,11 +20,14 @@ exporters:
     tls:
       insecure: true
 
-  # Loki exporter for log aggregation
-  otlphttp/logs:
-    endpoint: "http://loki:3100/otlp"
-    tls:
-      insecure: true
+  elasticsearch:
+    endpoints: ["http://elasticsearch:9200"]
+    logs_dynamic_index:
+      enabled: true
+    mapping:
+      mode: "ecs"
+    timeout: 5s
+    traces_index: "otel-traces"
 
 processors:
   batch:
@@ -45,8 +48,9 @@ service:
       exporters: [debug, prometheus]
     logs:
       receivers: [otlp]
-      processors: [memory_limiter, batch]
-      exporters: [debug, otlphttp/logs]
+      processors: [memory_limiter]
+      exporters: [elasticsearch, debug]
+
   telemetry:
     metrics:
       readers:

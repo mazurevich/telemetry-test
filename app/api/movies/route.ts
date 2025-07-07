@@ -10,7 +10,6 @@ export async function GET(request: NextRequest) {
 
 	try {
 		const url = "https://swapi.tech/api/films";
-		debugger;
 		logger.info("Fetching movies from SWAPI", { url });
 
 		const response = await fetch(url);

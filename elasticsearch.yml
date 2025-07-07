@@ -1,0 +1,4 @@
+discovery.type: single-node
+xpack.security.enabled: false
+action.auto_create_index: true 
+network.host: 0.0.0.0

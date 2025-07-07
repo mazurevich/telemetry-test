@@ -15,12 +15,17 @@ import { OTLPHttpJsonTraceExporter, registerOTel } from "@vercel/otel";
 export function register() {
 	// Set up logging
 	const loggerProvider = new LoggerProvider();
-	const logExporter = new OTLPLogExporter({
+	const otlpLogExporter = new OTLPLogExporter({
 		url: "http://localhost:4318/v1/logs",
 	});
-	loggerProvider.addLogRecordProcessor(
-		new SimpleLogRecordProcessor(logExporter),
-	);
+	const otlpLogProcessor = new SimpleLogRecordProcessor(otlpLogExporter);
+
+	const consoleLogExporter = new ConsoleLogRecordExporter();
+	const consoleLogProcessor = new SimpleLogRecordProcessor(consoleLogExporter);
+
+	loggerProvider.addLogRecordProcessor(otlpLogProcessor);
+	// for debug purpose also add console log exporter
+	loggerProvider.addLogRecordProcessor(consoleLogProcessor);
 	logs.setGlobalLoggerProvider(loggerProvider);
 
 	registerOTel({
@@ -33,9 +38,7 @@ export function register() {
 			exporter: new ConsoleMetricExporter({}),
 			exportIntervalMillis: 1000,
 		}),
-		logRecordProcessor: new SimpleLogRecordProcessor(
-			new ConsoleLogRecordExporter(),
-		),
+		logRecordProcessor: otlpLogProcessor,
 		// instrumentations: [getNodeAutoInstrumentations()],
 	});
 }
