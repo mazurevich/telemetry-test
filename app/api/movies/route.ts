@@ -3,16 +3,14 @@ import { type NextRequest, NextResponse } from "next/server";
 import { moviesResponseSchema } from "#/data/movie";
 import { createLogger } from "#/lib/logger";
 
-
 export async function GET(request: NextRequest) {
-
 	const requestId = crypto.randomUUID();
 	const logger = createLogger({
 		requestId,
 		endpoint: "/api/movies",
 	});
 
-	logger.info({ msg: "test" });
+	logger.info("test");
 
 	const tracer = trace.getTracer("movies");
 	// const span = tracer.startSpan("GET https://swapi.tech/api/films/");

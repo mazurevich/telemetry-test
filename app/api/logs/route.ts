@@ -39,16 +39,16 @@ export async function POST(request: NextRequest) {
 
 				switch (level) {
 					case "error":
-						requestLogger.error({ msg: `[CLIENT] ${message}`, ...logContext });
+						requestLogger.error(`[CLIENT] ${message}`, logContext);
 						break;
 					case "warn":
-						requestLogger.warn({ msg: `[CLIENT] ${message}`, ...logContext });
+						requestLogger.warn(`[CLIENT] ${message}`, logContext);
 						break;
 					case "debug":
-						requestLogger.debug({ msg: `[CLIENT] ${message}`, ...logContext });
+						requestLogger.debug(`[CLIENT] ${message}`, logContext);
 						break;
 					default:
-						requestLogger.info({ msg: `[CLIENT] ${message}`, ...logContext });
+						requestLogger.info(`[CLIENT] ${message}`, logContext);
 				}
 			}
 		} else {
@@ -73,22 +73,22 @@ export async function POST(request: NextRequest) {
 
 			switch (level) {
 				case "error":
-					requestLogger.error({ msg: `[CLIENT] ${message}`, ...logContext });
+					requestLogger.error(`[CLIENT] ${message}`, logContext);
 					break;
 				case "warn":
-					requestLogger.warn({ msg: `[CLIENT] ${message}`, ...logContext });
+					requestLogger.warn(`[CLIENT] ${message}`, logContext);
 					break;
 				case "debug":
-					requestLogger.debug({ msg: `[CLIENT] ${message}`, ...logContext });
+					requestLogger.debug(`[CLIENT] ${message}`, logContext);
 					break;
 				default:
-					requestLogger.info({ msg: `[CLIENT] ${message}`, ...logContext });
+					requestLogger.info(`[CLIENT] ${message}`, logContext);
 			}
 		}
 
 		const duration = Date.now() - startTime;
 		requestLogger.info({
-			msg: "Client logs processed successfully",
+			message: "Client logs processed successfully",
 			duration: `${duration}ms`,
 			logCount: body.logs?.length || 1,
 		});

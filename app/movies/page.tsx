@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import Link from "next/link";
 import type { Movie } from "#/data/movie";
+import { ErrorButton } from "./error-button";
 import { LogButton } from "./log-button";
 
 async function getMovies() {
@@ -55,6 +56,7 @@ export default async function MoviesPage() {
 				))}
 			</div>
 			<LogButton />
+			<ErrorButton />
 		</main>
 	);
 }
