@@ -2,11 +2,24 @@ import { trace } from "@opentelemetry/api";
 import pino from "pino";
 
 // Environment-based configuration
-const isDevelopment = process.env.NODE_ENV === "development";
+// const isDevelopment = process.env.NODE_ENV === "development";
+const isDevelopment = false;
 
-// Create the base logger configuration
-const createLoggerConfig = () => {
-	const baseConfig = {
+console.log("process.env", JSON.stringify(process.env, null, 2));
+
+const telemetryTransport = pino.transport({
+	target: "pino-opentelemetry-transport",
+});
+const prettyTransport = pino.transport({
+	target: "pino-pretty",
+	options: {
+		colorize: true,
+		translateTime: "SYS:standard",
+		ignore: "pid,hostname",
+	},
+});
+const logger = pino(
+	{
 		level: isDevelopment ? "debug" : "info",
 		timestamp: pino.stdTimeFunctions.isoTime,
 		formatters: {
@@ -25,23 +38,9 @@ const createLoggerConfig = () => {
 				return object;
 			},
 		},
-		transport: isDevelopment
-			? {
-					target: "pino-pretty",
-					options: {
-						colorize: true,
-						translateTime: "SYS:standard",
-						ignore: "pid,hostname",
-					},
-				}
-			: undefined,
-	};
-
-	return baseConfig;
-};
-
-// Create the main logger instance
-const logger = pino(createLoggerConfig());
+	},
+	pino.multistream([telemetryTransport, prettyTransport]),
+);
 
 // Create a logger factory for creating child loggers with context
 export const createLogger = (context?: Record<string, any>) => {
@@ -53,37 +52,3 @@ export const createLogger = (context?: Record<string, any>) => {
 
 // Export the main logger instance
 export { logger };
-
-// Helper functions for common logging patterns
-export const logError = (error: Error, context?: Record<string, any>) => {
-	const errorLogger = context ? logger.child(context) : logger;
-	errorLogger.error({
-		err: {
-			message: error.message,
-			stack: error.stack,
-			name: error.name,
-		},
-	});
-};
-
-export const logRequest = (req: any, context?: Record<string, any>) => {
-	const requestLogger = context ? logger.child(context) : logger;
-	requestLogger.info({
-		method: req.method,
-		url: req.url,
-		userAgent: req.headers?.["user-agent"],
-		ip: req.headers?.["x-forwarded-for"] || req.headers?.["x-real-ip"],
-	});
-};
-
-export const logResponse = (
-	res: any,
-	duration: number,
-	context?: Record<string, any>,
-) => {
-	const responseLogger = context ? logger.child(context) : logger;
-	responseLogger.info({
-		statusCode: res.statusCode,
-		duration: `${duration}ms`,
-	});
-};

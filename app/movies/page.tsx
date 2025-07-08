@@ -1,7 +1,6 @@
 import { headers } from "next/headers";
 import Link from "next/link";
 import type { Movie } from "#/data/movie";
-import { logger } from "#/lib/logger";
 import { LogButton } from "./log-button";
 
 async function getMovies() {

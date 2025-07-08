@@ -25,7 +25,7 @@ exporters:
     logs_dynamic_index:
       enabled: true
     mapping:
-      mode: "ecs"
+      mode: "otel"
     timeout: 5s
     traces_index: "otel-traces"
 
