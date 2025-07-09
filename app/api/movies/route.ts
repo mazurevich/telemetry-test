@@ -20,7 +20,15 @@ export async function GET(request: NextRequest) {
 		const url = "https://swapi.tech/api/films";
 		logger.info("Fetching movies from SWAPI", { url });
 
-		const response = await fetch(url);
+		const response = await fetch(url, {
+			// Next.js cache options
+			next: {
+				// Cache for 1 hour (3600 seconds)
+				revalidate: 10,
+				// Alternative: use tags for cache invalidation
+				tags: ["movies", "swapi"],
+			},
+		});
 		const data = await response.json();
 
 		// span.setAttribute("http.url", url);

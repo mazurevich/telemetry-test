@@ -1,8 +1,16 @@
 import { headers } from "next/headers";
 import Link from "next/link";
 import type { Movie } from "#/data/movie";
+
+import { createCounterMetric } from "#/lib/metrics";
 import { ErrorButton } from "./error-button";
-import { LogButton } from "./log-button";
+
+// import { LogButton } from "./log-button";
+
+const counter = createCounterMetric({
+	name: "movies-page-requests-counter",
+	description: "Counter for movies page",
+});
 
 async function getMovies() {
 	const host = (await headers()).get("host");
@@ -22,6 +30,8 @@ async function getMovies() {
 
 export default async function MoviesPage() {
 	const data = await getMovies();
+	console.log("add +1 to page count");
+	counter.add(1);
 
 	const movies = data;
 
@@ -55,7 +65,7 @@ export default async function MoviesPage() {
 					</div>
 				))}
 			</div>
-			<LogButton />
+			{/* <LogButton /> */}
 			<ErrorButton />
 		</main>
 	);

@@ -2,6 +2,7 @@ import { ecsFormat } from "@elastic/ecs-pino-format";
 import fs from "fs";
 import path from "path";
 import pino, { multistream } from "pino";
+import { SERVICE_NAME } from "#/constants";
 
 // Environment-based configuration
 const isDevelopment = process.env.NODE_ENV === "development";
@@ -37,7 +38,7 @@ const logger = pino(
 		{
 			stream: fileDestination,
 			formatter: ecsFormat({
-				serviceName: "sw-movies",
+				serviceName: SERVICE_NAME,
 				serviceEnvironment: isDevelopment ? "development" : "production",
 				serviceVersion: "1.0.0",
 			}),
