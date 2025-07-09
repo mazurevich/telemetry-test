@@ -46,10 +46,6 @@ service:
       receivers: [otlp]
       processors: [memory_limiter, batch]
       exporters: [debug, prometheus]
-    logs:
-      receivers: [otlp]
-      processors: [memory_limiter]
-      exporters: [elasticsearch, debug]
 
   telemetry:
     metrics:

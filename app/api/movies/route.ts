@@ -3,16 +3,14 @@ import { type NextRequest, NextResponse } from "next/server";
 import { moviesResponseSchema } from "#/data/movie";
 import { createLogger } from "#/lib/logger";
 
-
 export async function GET(request: NextRequest) {
-
 	const requestId = crypto.randomUUID();
 	const logger = createLogger({
 		requestId,
 		endpoint: "/api/movies",
 	});
 
-	logger.info({ msg: "test" });
+	logger.info("test");
 
 	const tracer = trace.getTracer("movies");
 	// const span = tracer.startSpan("GET https://swapi.tech/api/films/");
@@ -22,7 +20,15 @@ export async function GET(request: NextRequest) {
 		const url = "https://swapi.tech/api/films";
 		logger.info("Fetching movies from SWAPI", { url });
 
-		const response = await fetch(url);
+		const response = await fetch(url, {
+			// Next.js cache options
+			next: {
+				// Cache for 1 hour (3600 seconds)
+				revalidate: 10,
+				// Alternative: use tags for cache invalidation
+				tags: ["movies", "swapi"],
+			},
+		});
 		const data = await response.json();
 
 		// span.setAttribute("http.url", url);
